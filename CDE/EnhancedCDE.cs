@@ -1,39 +1,63 @@
 ﻿using System.Linq;
 
-namespace Progetto {
-	public class EnhancedCDE : CDE {
-		public void UpdateSpecification(string newSpec) {
-			var specification = parser.Parse(newSpec);
+namespace simpleCDE 
+{
+    public class EnhancedCDE : CDE 
+    {
+        public void UpdateSpecification(string newSpec) 
+        {
+            var specification = parser.Parse(newSpec);
 
-			foreach (var service in specification.Services)
-				foreach (var agent in specification.Agents)
-					if (agent.ServiceImplemented == service.ServiceName) {
-						int activeInstances = activeAgents.Count(pair => {
-							var agn = pair.Item1;
-							return agn.ServiceImplemented == agent.ServiceImplemented;
-						});
+            foreach (var service in specification.Services)
+            {
+                foreach (var agent in specification.Agents)
+                {
+                    if (agent.ServiceImplemented == service.ServiceName) 
+                    {
+                        int activeInstances = activeAgents.Count(pair => {
+                            var agn = pair.Item1;
+                            return agn.ServiceImplemented == agent.ServiceImplemented;
+                        });
 
-						if (activeInstances < service.Units) 
-							CreateServiceInstances(specification, service, agent, service.Units - activeInstances);
-						else 
-							RemoveServiceInstances(service, activeInstances - service.Units);
-					}
-			
-			if (specification.Relations != null)
-				activeRelations.AddRange(specification.Relations);
-		}
+                        if (activeInstances < service.Units) 
+                        {
+                            CreateServiceInstances(
+                                specification, 
+                                service, 
+                                agent, 
+                                service.Units - activeInstances
+                            );
+                        }
+                        else
+                        {
+                            RemoveServiceInstances(
+                                service, 
+                                activeInstances - service.Units
+                            );
+                        }
+                    }
+                }
+            }
 
-		private void RemoveServiceInstances(Service service, int amount) {
-			for (int i = 0; i < amount; i++) {
-				var tuple = activeAgents.First(pair => {
-					var agn = pair.Item1;
-					return agn.ServiceImplemented == service.ServiceName;
-				});
+            if (specification.Relations != null)
+            {
+                activeRelations.AddRange(specification.Relations);
+            }
+        }
 
-				var bridge = tuple.Item2;
-				provider.HaltAgent(bridge);
-				activeAgents.Remove(tuple);
-			}
-		}
-	}
+        private void RemoveServiceInstances(Service service, int amount) 
+        {
+            for (int i = 0; i < amount; i++) 
+            {
+                var tuple = activeAgents.First(pair => {
+                    var agn = pair.Item1;
+                    return agn.ServiceImplemented == service.ServiceName;
+                });
+
+                var bridge = tuple.Item2;
+                provider.HaltAgent(bridge);
+                activeAgents.Remove(tuple);
+            }
+        }
+    }
 }

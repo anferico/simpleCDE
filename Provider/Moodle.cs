@@ -1,69 +1,107 @@
 ﻿using System;
 using System.Threading;
-namespace Progetto {
-	public class Moodle : IAgent {
-		public event CDE.EventHandler EventCompleted;
-		private Thread handlersThread;
-		private Random random;
 
-		public Moodle() {
-			random = new Random();
-		}
+namespace simpleCDE 
+{
+    public class Moodle : IAgent 
+    {
+        public event CDE.EventHandler EventCompleted;
+        private Thread handlersThread;
+        private Random random;
 
-		public void install(string eventName) {
-			try {
-				Thread.Sleep(random.Next(500, 1000));
+        public Moodle() 
+        {
+            random = new Random();
+        }
 
-				if (EventCompleted != null)
-					EventCompleted(eventName, "install");
+        public void install(string eventName) 
+        {
+            try 
+            {
+                Thread.Sleep(random.Next(500, 1000));
 
-				Console.WriteLine(string.Format("Moodle: event {0} completed.", eventName));
-			} catch (ThreadAbortException) {
-				Console.WriteLine("Moodle: halted.");
-			}
-		}
+                if (EventCompleted != null) 
+                {
+                    EventCompleted(eventName, "install");
+                }
 
-		public void connect(string eventName) {
-			try {
-				Thread.Sleep(random.Next(1500, 2000));
+                Console.WriteLine(
+                    string.Format("Moodle: event {0} completed.", eventName)
+                );
+            } 
+            catch (ThreadAbortException) 
+            {
+                Console.WriteLine("Moodle: halted.");
+            }
+        }
 
-				if (EventCompleted != null)
-					EventCompleted(eventName, "connect");
+        public void connect(string eventName) 
+        {
+            try 
+            {
+                Thread.Sleep(random.Next(1500, 2000));
 
-				Console.WriteLine(string.Format("Moodle: event {0} completed.", eventName));
-			} catch (ThreadAbortException) {
-				Console.WriteLine("Moodle: halted.");
-			}
-		}
+                if (EventCompleted != null)
+                {
+                    EventCompleted(eventName, "connect");
+                }
 
-		public void start(string eventName) {
-			try {
-				Thread.Sleep(random.Next(3000, 5000));
+                Console.WriteLine(
+                    string.Format("Moodle: event {0} completed.", eventName)
+                );
+            } 
+            catch (ThreadAbortException) 
+            {
+                Console.WriteLine("Moodle: halted.");
+            }
+        }
 
-				if (EventCompleted != null)
-					EventCompleted(eventName, "start");
+        public void start(string eventName) 
+        {
+            try 
+            {
+                Thread.Sleep(random.Next(3000, 5000));
 
-				Console.WriteLine(string.Format("Moodle: event {0} completed.", eventName));
-			} catch (ThreadAbortException) {
-				Console.WriteLine("Moodle: halted.");
-			}
-		}
+                if (EventCompleted != null)
+                {
+                    EventCompleted(eventName, "start");
+                }
 
-		public void OnEventTriggered(string eventName, string actionName) {
-			switch (actionName) {
-				case "install": handlersThread = new Thread(() => install(eventName));
-					break;
-				case "connect": handlersThread = new Thread(() => connect(eventName));
-					break;
-				case "start": handlersThread = new Thread(() => start(eventName));
-					break;
-			}
-			handlersThread.Start();
-		}
+                Console.WriteLine(
+                    string.Format("Moodle: event {0} completed.", eventName)
+                );
+            } 
+            catch (ThreadAbortException) 
+            {
+                Console.WriteLine("Moodle: halted.");
+            }
+        }
 
-		public void Halt() {
-			if (handlersThread != null && handlersThread.IsAlive)
-				handlersThread.Abort();
-		}
-	}
+        public void OnEventTriggered(string eventName, string actionName) 
+        {
+            switch (actionName) 
+            {
+                case "install": 
+                    handlersThread = new Thread(() => install(eventName));
+                    break;
+
+                case "connect": 
+                    handlersThread = new Thread(() => connect(eventName));
+                    break;
+
+                case "start": 
+                    handlersThread = new Thread(() => start(eventName));
+                    break;
+            }
+            handlersThread.Start();
+        }
+
+        public void Halt() 
+        {
+            if (handlersThread != null && handlersThread.IsAlive)
+            {
+                handlersThread.Abort();
+            }
+        }
+    }
 }

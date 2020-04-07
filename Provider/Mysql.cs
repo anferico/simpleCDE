@@ -1,54 +1,80 @@
 ﻿using System;
 using System.Threading;
-namespace Progetto {
-	public class Mysql : IAgent {
-		public event CDE.EventHandler EventCompleted;
-		private Thread handlersThread;
-		private Random random;
 
-		public Mysql() {
-			random = new Random();
-		}
+namespace simpleCDE 
+{
+    public class Mysql : IAgent 
+    {
+        public event CDE.EventHandler EventCompleted;
+        private Thread handlersThread;
+        private Random random;
 
-		public void install(string eventName) {
-			try {
-				Thread.Sleep(random.Next(500, 1000));
+        public Mysql() 
+        {
+            random = new Random();
+        }
 
-				if (EventCompleted != null)
-					EventCompleted(eventName, "install");
+        public void install(string eventName) 
+        {
+            try 
+            {
+                Thread.Sleep(random.Next(500, 1000));
 
-				Console.WriteLine(string.Format("Mysql: event {0} completed.", eventName));
-			} catch (ThreadAbortException) {
-				Console.WriteLine("Mysql: halted.");
-			}
-		}
+                if (EventCompleted != null)
+                {
+                    EventCompleted(eventName, "install");
+                }
 
-		public void start(string eventName) {
-			try {
-				Thread.Sleep(random.Next(5000, 10000));
+                Console.WriteLine(string.Format("Mysql: event {0} completed.", eventName));
+            } 
+            catch (ThreadAbortException) 
+            {
+                Console.WriteLine("Mysql: halted.");
+            }
+        }
 
-				if (EventCompleted != null)
-					EventCompleted(eventName, "start");
+        public void start(string eventName) 
+        {
+            try 
+            {
+                Thread.Sleep(random.Next(5000, 10000));
 
-				Console.WriteLine(string.Format("Mysql: event {0} completed.", eventName));
-			} catch (ThreadAbortException) {
-				Console.WriteLine("Mysql: halted.");
-			}
-		}
+                if (EventCompleted != null)
+                {
+                    EventCompleted(eventName, "start");
+                }
 
-		public void OnEventTriggered(string eventName, string actionName) {
-			switch (actionName) {
-				case "install": handlersThread = new Thread(() => install(eventName));
-					break;
-				case "start": handlersThread = new Thread(() => start(eventName));
-					break;
-			}
-			handlersThread.Start();
-		}
+                Console.WriteLine(
+                    string.Format("Mysql: event {0} completed.", eventName)
+                );
+            } 
+            catch (ThreadAbortException) 
+            {
+                Console.WriteLine("Mysql: halted.");
+            }
+        }
 
-		public void Halt() {
-			if (handlersThread != null && handlersThread.IsAlive)
-				handlersThread.Abort();
-		}
-	}
+        public void OnEventTriggered(string eventName, string actionName) 
+        {
+            switch (actionName) 
+            {
+                case "install": 
+                    handlersThread = new Thread(() => install(eventName));
+                    break;
+
+                case "start": 
+                    handlersThread = new Thread(() => start(eventName));
+                    break;
+            }
+            handlersThread.Start();
+        }
+
+        public void Halt() 
+        {
+            if (handlersThread != null && handlersThread.IsAlive)
+            {
+                handlersThread.Abort();
+            }
+        }
+    }
 }
