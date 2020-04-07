@@ -46,3 +46,6 @@ The [CDE](CDE/CDE.cs) class features a `DeployApplication` method for deploying 
 On the other hand, the [EnhancedCDE](CDE/EnhancedCDE.cs) class also provides an `UpdateSpecification` method which is used to update the current state of the application according to an updated version of the YAML specification file for that application. For example, if the original specification file required a single instance of the `moodle` service but the new one requires 2, the cloud deployment engine will instantiate a second copy of the `moodle` service. Instead, if the new specification doesn't require any instance of `moodle` at all, the currently running instance is terminated.
 
 Under the [Provider](Provider) directory you can find the classes that implement the cloud provider and the single services. In this case, [Moodle](Provider/Moodle.cs) implements the `moodle` service, whereas [Mysql](Provider/Mysql.cs) implements the `database` service. Since this is a toy example, the methods of such classes simply sleep for a random period of time to simulate some kind of real behavior.
+
+##Usage
+Simply run [Program.cs](Program.cs) to simulate the execution of a cloud application whose structure is defined in [spec.yaml](spec.yaml). You will see that the events for each service will be triggered and handled in the right order.
