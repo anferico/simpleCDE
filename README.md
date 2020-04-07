@@ -47,5 +47,5 @@ On the other hand, the [EnhancedCDE](CDE/EnhancedCDE.cs) class also provides an 
 
 Under the [Provider](Provider) directory you can find the classes that implement the cloud provider and the single services. In this case, [Moodle](Provider/Moodle.cs) implements the `moodle` service, whereas [Mysql](Provider/Mysql.cs) implements the `database` service. Since this is a toy example, the methods of such classes simply sleep for a random period of time to simulate some kind of real behavior.
 
-##Usage
+## Usage
 Simply run [Program.cs](Program.cs) to simulate the execution of a cloud application whose structure is defined in [spec.yaml](spec.yaml). You will see that the events for each service will be triggered and handled in the right order.
